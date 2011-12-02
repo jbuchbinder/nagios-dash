@@ -1,15 +1,29 @@
 
 html, body {
 	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
 }
+
+/* Make the button styling and alignment proper */
+
+button { padding: 5px; }
+
+button * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+button img { padding-right: 5px; }
 
 /* Container which holds all Nagios status lines */
 
-.nagios-status-container {
+#nagios-status-container {
+	margin-top: 50px;
 	width: 100%;
-	display: table-cell;
-	vertical-align: middle;
 }
+
+/* Status notifications, displayed to the right of buttons */
 
 #nagios-notification-bar {
 	display: none;
@@ -23,8 +37,22 @@ html, body {
 	background: -moz-linear-gradient(top,  #ccc,  #000); /* for firefox 3.6+ */ 
 }
 
+/* Fixed top bar, used for buttons, etc */
+
 #nagios-select-panel {
+	position: fixed; top: 0; left: 0;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
 	width: 100%;
+	
+	background: #eeeeee; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#eeeeee)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #cccccc,  #eeeeee); /* for firefox 3.6+ */ 
+}
+
+#nagios-select-panel * {
 	display: inline-block;
 	vertical-align: middle;
 }
