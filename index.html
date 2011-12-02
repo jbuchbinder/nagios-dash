@@ -15,17 +15,21 @@
 	<input type="checkbox" id="only-active" checked="checked" value="1" onChange="loadNagiosStatus();" />
 	<label for="only-active">Show only active alerts</label>
 </span>
-<button>
+<button id="global-ack">
 	<img src="img/tick.png" border="0" />
 	<span>Acknowledge</span>
 </button>
-<button>
+<button id="global-mute">
 	<img src="img/sound_mute.png" border="0" />
 	<span>Disable Notifications</span>
 </button>
-<button>
+<button id="global-downtime">
 	<img src="img/umbrella.png" border="0" /><span>
 	<span>Downtime</span>
+</button>
+<button id="global-refresh">
+	<img src="img/arrow_refresh.png" border="0" /><span>
+	<span>Refresh</span>
 </button>
 <span id="nagios-notification-bar"/>
 </div>
