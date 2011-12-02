@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Nagios</title>
+<script language="javascript" src="js/jquery-1.7.1.min.js"></script>
+<script language="javascript" src="js/jquery-ui-1.8.14.custom.min.js"></script>
+<link type="text/css" href="css/smoothness/jquery-ui-1.8.14.custom.min.css" />
+<script language="javascript" src="js/settings.js"></script>
+<script language="javascript" src="js/nagios-status.js"></script>
+<link type="text/css" href="css/nagios.css" rel="Stylesheet" />
+</head>
+<body>
+<div id="nagios-select-panel">
+<img src="img/nagiosdash.png" height="40" border="0" class="logo" />
+<span>
+	<input type="checkbox" id="only-active" checked="checked" value="1" onChange="loadNagiosStatus();" />
+	<label for="only-active">Show only active alerts</label>
+</span>
+<button>
+	<img src="img/tick.png" border="0" />
+	<span>Acknowledge</span>
+</button>
+<button>
+	<img src="img/sound_mute.png" border="0" />
+	<span>Disable Notifications</span>
+</button>
+<button>
+	<img src="img/umbrella.png" border="0" /><span>
+	<span>Downtime</span>
+</button>
+<span id="nagios-notification-bar"/>
+</div>
+<div id="nagios-status-container"></div>
+</body>
+</html>
