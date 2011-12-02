@@ -4,11 +4,11 @@ var baseuri = nagiosuri + '/cgi-bin/api.cgi';
 var alertData;
 
 function loadNagiosStatus() {
-  $('#global-refresh').attr('disabled', 'disabled');
+	$('#global-refresh').attr('disabled', 'disabled');
 	$('#nagios-status-container').html('<div align="center" class="loading"><img src="img/ajax-loader.gif" border="0" /> <span style="display: block; vertical-align: middle; margin: 5px;">Loading ...</span></div>');
 	var s = [];
 	$.get(baseuri + '?action=service.problems' + ( $('#only-active').is(':checked') ? '&only_active=1' : '' ), function(data) {
-    $('#global-refresh').attr('disabled', '');
+		$('#global-refresh').removeAttr('disabled');
 		alertData = data;
 		// TODO: Sort and manipulate?
 		alertData = sortByStatus(alertData);
@@ -68,13 +68,13 @@ function statusToText(s, i) {
 }
 
 $(document).ready(function() {
-  // Bind button actions
-  $( '#global-refresh' ).bind('click', function() {
-    loadNagiosStatus();
-  });
+	// Bind button actions
+	$( '#global-refresh' ).bind('click', function() {
+		loadNagiosStatus();
+	});
 	$( '#nagios-notification-bar').hide();
 
-  // Load all data
+	// Load all data
 	loadNagiosStatus();
 });
 
