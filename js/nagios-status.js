@@ -1,3 +1,5 @@
+// NAGIOS-DASH
+// https://github.com/jbuchbinder/nagios-dash
 
 var baseuri = nagiosuri + '/cgi-bin/api.cgi';
 
@@ -27,7 +29,7 @@ function consolePopulate(data) {
 		toInsert += '<div id="nagios-status-id-' + iter + '" class="nagios-status ' + d.status.toLowerCase() + '">' + statusToText(d, iter) + '</div>';
 		iter++;
 	});
-	preLoadBinding();
+	preLoadBinding(true);
 	$('#nagios-status-container').html(toInsert);
 	postLoadBinding();
 }
@@ -45,19 +47,42 @@ function sortByStatus(data) {
 }
 
 function statusToText(s, i) {
+	var acked = (s.acknowledged == 1);
+	var muted = !(s.notifications_enabled == 1);
+	//var selected = false;
+	//$.each(selectedItems, function(key, item) {
+	//	if (item == i) { selected = true; }
+	//});
 	return '<span class="statustext service">' + s.host + '[' + s.service + ']</span>' +
 		'<span class="statustext action">' +
-			'<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />' +
-			'<img src="img/sound_mute.png" border="0" id="mute-' + i + '" alt="Disable Notifications" />' +
+			( acked
+				? '<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />'
+				: '<img src="img/check_box.png" border="0" alt="Acknowledged" />'
+			) +
+			( muted
+				? '<img src="img/sound.png" border="0" id="unmute-' + i + '" alt="Enable Notifications" />'
+				: '<img src="img/sound_mute.png" border="0" id="mute-' + i + '" alt="Disable Notifications" />'
+			) +
 			'<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />' +
 			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
 		'</span>' +
 		'<span class="statustext output">' + s.plugin_output + '</span>';
 }
 
-function preLoadBinding() {
+// Refresh display for a particular service line, to be called after an
+// action has been completed which would change its status.
+function updateIndividualStatusLine(s, i) {
+	var divId = 'nagios-status-id-' + id;
+
+	// Hack alert -- rebinding *all* status line events
+	preLoadBinding(false);
+	$( '#' + divId ).html(statusToText(s, i));
+	postLoadBinding();
+}
+
+function preLoadBinding(all) {
 	// Remove all "selected items"
-	selectedItems = [ ];
+	if (all) { selectedItems = [ ]; }
 
 	// Remove any past bindings to keep everything clean
 	$( '.statustext' ).unbind();
@@ -65,6 +90,16 @@ function preLoadBinding() {
 }
 
 function postLoadBinding() {
+	// Make sure "selected" exists for everything in selectedItems,
+	// otherwise we'll lose selection on non-"all" reload.
+	$.each(selectedItems, function(k, v) {
+		$('#nagios-status-checkbox-' + v).prop('checked', true);
+
+		// Add 'selected' class to parent, to let the CSS handle the
+		// visual element of this being selected.
+		$('#nagios-status-id-' + v).addClass('selected');
+	});
+
 	// Set click handler for all columns so that a click on the column
 	// is the same as a virtual click on a checkbox so that we don't
 	// have to include a checkbox.
@@ -101,18 +136,14 @@ function postLoadBinding() {
 						$( '#nagios-notification-bar').text( d.host + '[' + d.service + '] acknowledged' );
 						$( '#nagios-notification-bar').show();
 						$( this ).dialog( "close" );
-						if (onlyActive) {
-							$( '#nagios-status-id-' + id ).hide( 'pulsate', {}, 300, function() {
-								$( '#nagios-notification-bar').hide();
-							});
-						}
+						nagiosAction( action, d, null );
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" );
 					}
 				}
 			});
-		} else if ( action = 'mute' ) {
+		} else if ( action == 'mute' ) {
 			$( "#dialog-ack-mute" ).dialog({
 				resizable: false,
 				height: 140,
@@ -122,18 +153,31 @@ function postLoadBinding() {
 						$( '#nagios-notification-bar').text( d.host + '[' + d.service + '] muted notifications' );
 						$( '#nagios-notification-bar').show();
 						$( this ).dialog( "close" );
-						if (onlyActive) {
-							$( '#nagios-status-id-' + id ).hide( 'pulsate', {}, 300, function() {
-								$( '#nagios-notification-bar').hide();
-							});
-						}
+						nagiosAction( action, d, null );
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" );
 					}
 				}
 			});
-		} else if ( action = 'down' ) {
+		} else if ( action == 'unmute' ) {
+			$( "#dialog-ack-unmute" ).dialog({
+				resizable: false,
+				height: 140,
+				modal: true,
+				buttons: {
+					"Unmute": function() {
+						$( '#nagios-notification-bar').text( d.host + '[' + d.service + '] unmuted notifications' );
+						$( '#nagios-notification-bar').show();
+						$( this ).dialog( "close" );
+						nagiosAction( action, d, null );
+					},
+					"Cancel": function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			});
+		} else if ( action == 'down' ) {
 			$( "#dialog-ack-down" ).dialog({
 				resizable: false,
 				height: 140,
@@ -143,11 +187,7 @@ function postLoadBinding() {
 						$( '#nagios-notification-bar').text( d.host + '[' + d.service + '] set for downtime' );
 						$( '#nagios-notification-bar').show();
 						$( this ).dialog( "close" );
-						if (onlyActive) {
-							$( '#nagios-status-id-' + id ).hide( 'pulsate', {}, 300, function() {
-								$( '#nagios-notification-bar').hide();
-							});
-						}
+						nagiosAction( action, d, null );
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" );
@@ -157,6 +197,65 @@ function postLoadBinding() {
 		}
 
 		return false; // stop executing here
+	});
+}
+
+// Perform the actual calls to the Nagios API which execute the
+// action in question.
+function nagiosAction( action, d, options ) {
+	var reqUrl = baseuri + '?action=';
+
+	// Form request URL based on the action
+	if (action == 'ack') {
+		reqUrl += 'service.ack&host=' + encodeURIComponent(d.host) +
+			'&service=' + encodeURIComponent(d.service) +
+			'&persistent_comment=1' +
+			'&send_notification=1' +
+			'&comment=' + encodeURIComponent(options['comment']);
+	} else if (action == 'hostack') {
+		// TODO: implement in UI
+		reqUrl += 'host.ack&host=' + encodeURIComponent(d.host) +
+			'&persistent_comment=1' +
+			'&send_notification=1' +
+			'&comment=' + encodeURIComponent(options['comment']);
+	} else if (action == 'down') {
+		// TODO: implement down in API
+	} else if (action == 'mute') {
+		reqUrl += 'service.notifications&host=' + encodeURIComponent(d.host) +
+			'&enable=0';
+	} else if (action == 'unmute') {
+		reqUrl += 'service.notifications&host=' + encodeURIComponent(d.host) +
+			'&enable=1';
+	} else {
+		alert('Invalid action "' + action + '" specified!');
+		return;
+	}
+
+	// Perform API call
+	$.get(reqUrl, function(data) {
+		if (onlyActive) {
+			// If we're only showing 'active' stuff, animate hide action
+			$( '#nagios-status-id-' + id ).hide( 'pulsate', {}, 300, function() {
+				$( '#nagios-notification-bar').hide();
+			});
+		} else {
+			// If we're displaying everything, we need to populate the UI
+			// with all applicable data, so re-render.
+
+			// Adjust our internal data structure
+			if (action == 'ack') {
+				d.acknowledged = 1;	
+			} else if (action == 'down') {
+				// TODO: fix action
+			} else if (action == 'mute') {
+				d.notifications_enabled = 0;
+			} else if (action == 'unmute') {
+				d.notifications_enabled = 1;
+			}
+
+			// Force UI update for that line
+			updateIndividualStatusLine(d, id);
+		}
 	});
 }
 
