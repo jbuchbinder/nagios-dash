@@ -23,7 +23,9 @@ function consolePopulate(data) {
 		toInsert += '<div id="nagios-status-id-' + iter + '" class="nagios-status ' + d.status.toLowerCase() + '">' + statusToText(d, iter) + '</div>';
 		iter++;
 	});
+	preLoadBinding();
 	$('#nagios-status-container').html(toInsert);
+	postLoadBinding();
 	$('.statustext.action img').bind('click', function() {
 		var parts = $(this).attr('id').split('-'); 
 		var action = parts[0];
@@ -57,14 +59,45 @@ function sortByStatus(data) {
 }
 
 function statusToText(s, i) {
-	return '<span class="statustext service">' + s.host + '[' + s.service + ']</span> ' +
-		' <span class="statustext action">' +
+	return '<span class="statustext service">' + s.host + '[' + s.service + ']</span>' +
+		'<span class="statustext action">' +
 			'<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />' +
 			'<img src="img/sound_mute.png" border="0" id="mute-' + i + '" alt="Disable Notifications" />' +
 			'<img src="img/umbrella.png" border="0" id="downtime-' + i + '" alt="Schedule Downtime" />' +
-			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" value="1" />' +
-		'</span> ' +
-		' <span class="statustext output">' + s.plugin_output + '</span>';
+			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
+		'</span>' +
+		'<span class="statustext output">' + s.plugin_output + '</span>';
+}
+
+function preLoadBinding() {
+	$( '.statustext' ).unbind();
+}
+
+function postLoadBinding() {
+	$( '.statustext' ).bind('click', function() {
+		var id = $(this).parent().attr('id').replace('nagios-status-id-', '');
+		var checked = $('#nagios-status-checkbox-' + id).is(':checked');
+		$('#nagios-status-checkbox-' + id).prop('checked', !checked);
+		// Add 'selected' class to parent
+		if (!checked) {
+			$(this).parent().addClass('selected');
+		} else {
+			$(this).parent().removeClass('selected');
+		}
+		return false;
+	});
+	$( '.nagios-status-checkbox' ).click(function() {
+		var id = $(this).attr('id').replace('nagios-status-checkbox-', '');
+		var checked = $(this).is(':checked');
+		if (checked) {
+			$('#nagios-status-id-' + id).addClass('selected');
+			$(this).prop('checked', true);
+		} else {
+			$('#nagios-status-id-' + id).removeClass('selected');
+			$(this).prop('checked', false);
+		}
+		return false;
+	});
 }
 
 $(document).ready(function() {

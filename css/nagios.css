@@ -21,6 +21,7 @@ button img { padding-right: 5px; }
 #nagios-status-container {
 	margin-top: 50px;
 	width: 100%;
+	display: table;
 }
 
 /* Status notifications, displayed to the right of buttons */
@@ -73,10 +74,19 @@ button img { padding-right: 5px; }
 	padding-top: 3px;
 	padding-bottom: 3px;
 	padding-left: 20px;
+	display: table-row;
+	margin-bottom: 1px;
+	cursor: hand;
+	width: 100%;
+	max-width: 100%;
 }
 
 .nagios-status:hover {
 	border: 1px solid #000000;
+}
+
+.nagios-status-checkbox {
+	display: none;
 }
 
 /* How to display loading "dialog" */
@@ -97,20 +107,29 @@ button img { padding-right: 5px; }
 .unknown { background-color: #ff9955; }
 .unknown:hover { background-color: #ff5500; }
 
+/* Overrides for selected statuses */
+
+.selected {
+	color: #ffffff;
+	background-color: #000000;
+}
+.selected:hover {
+	background-color: #444444 !important;
+}
+
 .statustext {
-	display: inline-block;
+	display: table-cell;
 }
 
 .statustext.service {
-	width: 200px;
+	min-width: 225px;
 }
 
 .statustext.action {
-	width: 70px;
+	min-width: 70px;
 }
 
 .statustext.output {
-
 }
 
 /* All action icons need to show that they're clickable */
