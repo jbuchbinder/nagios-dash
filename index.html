@@ -34,6 +34,31 @@
 <span id="nagios-notification-bar"/>
 </div>
 <div id="nagios-status-container"></div>
+
+<!-- All dialog boxes, hidden by default -->
+
+<div id="dialog-single-ack" title="Acknowledge alert" style="display: none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Acknowledging this alert will ensure that no alarms are sent until
+	the issue is resolved. Are you sure you want to do this?
+	</p>
+</div>
+
+<div id="dialog-single-mute" title="Mute alert" style="display: none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Muting this alert will discontinue notifications in perpetuity. It
+	may mask future issues. Are you sure you want to do this?
+	</p>
+</div>
+
+<div id="dialog-single-downtime" title="Schedule downtime" style="display: none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Scheduling downtime for this service will allow you to set a period
+	of time when you do not want to receive notifications. You will not
+	be alerted to any issues during this time.
+	</p>
+</div>
+
 </body>
 </html>
 <!--
