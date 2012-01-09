@@ -15,11 +15,15 @@ here:
 
   https://github.com/jbuchbinder/nagios/tree/nagios-3.x-api
 
+or the Icinga API patch, available here:
+
+  https://github.com/jbuchbinder/icinga-core
+
 CONFIGURATION
 -------------
 
 To configure the console, edit js/settings.js and set the base URL of
-your Nagios installation. Other than a working copy of the api.cgi
+your Nagios/Icinga installation. Other than a working copy of the api.cgi
 binary from the aforementioned git branch, there are no external
 dependencies or server requirements.
 
