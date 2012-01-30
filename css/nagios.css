@@ -141,6 +141,23 @@ button img { padding-right: 5px; }
 	font-weight: bold;
 }
 
+.input-wrapper {
+	width: 200px;
+	border: solid 1px #000;
+	display: inline-block;
+	background: #ffffff;
+}
+
+.input-wrapper input {
+	width: 175px;
+	border: none;
+	margin-right: 5px;
+}
+
+.input-wrapper img:hover {
+	cursor: hand;
+}
+
 /*
  * vim: tabstop=4:softtabstop=4:shiftwidth=4:noexpandtab
  */

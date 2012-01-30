@@ -350,6 +350,10 @@ $(document).ready(function() {
 		$( '#console-filter' ).val('');
 		loadNagiosStatus();
 	});
+	$( '#console-filter-clear' ).bind('click', function() {
+		$( '#console-filter' ).val('');
+		filterConsole();
+	});
 	$( '#nagios-notification-bar').hide();
 	$( '#console-filter' ).bind('keyup', function() {
 		filterConsole();
