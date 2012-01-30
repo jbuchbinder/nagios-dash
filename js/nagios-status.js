@@ -64,6 +64,7 @@ function statusToText(s, i) {
 				: '<img src="img/sound_mute.png" border="0" id="mute-' + i + '" alt="Disable Notifications" />'
 			) +
 			'<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />' +
+			'<img src="img/zoom_in.png" border="0" id="zoom-' + i + '" alt="View Details" />' +
 			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
 		'</span>' +
 		'<span class="statustext output">' + s.plugin_output + '</span>';
@@ -177,6 +178,27 @@ function postLoadBinding() {
 					}
 				}
 			});
+		} else if ( action == 'zoom' ) {
+			// Populate zoom with host settings
+			var g_hostname = transform_nagios_hostname( d.host );
+
+			// TODO: Show some sort of loading dialog to avoid awkward
+			// stale data in certain cases.
+
+			// Pre-render display
+			renderZoom( g_hostname );
+
+			// Display zoom dialog
+			$( '#dialog-zoom' ).dialog({
+				resizable: false,
+				height: 400,
+				modal: true,
+				buttons: {
+					"Close": function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			});
 		} else if ( action == 'down' ) {
 			$( "#dialog-ack-down" ).dialog({
 				resizable: false,
@@ -258,6 +280,16 @@ function nagiosAction( action, d, options ) {
 		}
 	});
 }
+
+function renderZoom( hostname ) {
+	$.get(gangliauri + '/api/host.php?action=get&h=' + encodeURIComponent(hostname), function(data) {
+		var html = "";
+		$.each(data['graph'], function(k, d) {
+			html += '<img src="' + d['graph_url'] + '" />'
+		});
+		$( '#dialog-zoom' ).html( html );
+	});
+} // end renderZoom
 
 $(document).ready(function() {
 	// Bind button actions
