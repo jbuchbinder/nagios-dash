@@ -311,6 +311,19 @@ function nagiosAction( action, d, options ) {
 	});
 }
 
+function filterConsole ( ) {
+	var filterby = $( '#console-filter' ).val();
+	$( '.nagios-status' ).each(function(k,v) {
+		var id = $(this).attr('id').replace('nagios-status-id-', '');
+		var d = alertData[ id ];
+		if (d.host.match(filterby) || d.service.match(filterby) || d.plugin_output.match(filterby)) {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
+} // end filterConsole
+
 function renderZoom( hostname ) {
 	$.get(gangliauri + '/api/host.php?action=get' + 
 		  '&h=' + encodeURIComponent(hostname) +
@@ -333,9 +346,14 @@ function renderZoom( hostname ) {
 $(document).ready(function() {
 	// Bind button actions
 	$( '#global-refresh' ).bind('click', function() {
+		// Clear console filter, for now
+		$( '#console-filter' ).val('');
 		loadNagiosStatus();
 	});
 	$( '#nagios-notification-bar').hide();
+	$( '#console-filter' ).bind('keyup', function() {
+		filterConsole();
+	});
 
 	// Load all data
 	loadNagiosStatus();
