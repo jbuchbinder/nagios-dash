@@ -65,7 +65,7 @@ function statusToText(s, i) {
 			) +
 			'<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />' +
 			'<img src="img/zoom_in.png" border="0" id="zoom-' + i + '" alt="View Details" />' +
-			( s.action_url ? '<a href="' + s.action_url + '" target="_new"><img src="img/monitor_link.png" border="0" " alt="Action Information" /></a>' : '' ) +
+			( s.action_url ? '<img src="img/monitor_link.png" border="0" id="url-' + i + '" alt="Action Information" /></a>' : '' ) +
 			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
 		'</span>' +
 		'<span class="statustext output">' + s.plugin_output + '</span>';
@@ -179,6 +179,8 @@ function postLoadBinding() {
 					}
 				}
 			});
+		} else if ( action == 'url' ) {
+			window.open(d.action_url, '_new');
 		} else if ( action == 'zoom' ) {
 			// Populate zoom with host settings
 			var g_hostname = transform_nagios_hostname( d.host );
