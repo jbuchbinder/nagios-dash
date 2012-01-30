@@ -137,6 +137,10 @@ button img { padding-right: 5px; }
 	cursor: hand;
 }
 
+#nagios-zoom-hostname {
+	font-weight: bold;
+}
+
 /*
  * vim: tabstop=4:softtabstop=4:shiftwidth=4:noexpandtab
  */

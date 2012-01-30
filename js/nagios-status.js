@@ -184,6 +184,7 @@ function postLoadBinding() {
 
 			// Show some sort of loading dialog to avoid awkward stale
 			// data in certain cases.
+			$('#dialog-zoom-hostname').html('Host: ' + d.host);
 			$('#dialog-zoom p').html('<div align="center" class="loading"><img src="img/ajax-loader.gif" border="0" /> <span style="display: block; vertical-align: middle; margin: 5px;">Loading ...</span></div>');
 
 			// Pre-render display
