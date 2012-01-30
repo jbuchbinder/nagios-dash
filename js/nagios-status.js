@@ -191,8 +191,9 @@ function postLoadBinding() {
 
 			// Display zoom dialog
 			$( '#dialog-zoom' ).dialog({
-				resizable: false,
-				height: 400,
+				resizable: true,
+				width: '90%',
+				height: 750,
 				modal: true,
 				buttons: {
 					"Close": function() {
@@ -283,6 +284,9 @@ function nagiosAction( action, d, options ) {
 }
 
 function renderZoom( hostname ) {
+	console.log(gangliauri + '/api/host.php?action=get' + 
+		  '&h=' + encodeURIComponent(hostname) +
+		  '&c=' + encodeURIComponent(resolve_ganglia_cluster(hostname)));
 	$.get(gangliauri + '/api/host.php?action=get' + 
 		  '&h=' + encodeURIComponent(hostname) +
 		  '&c=' + encodeURIComponent(resolve_ganglia_cluster(hostname)), function(data) {
