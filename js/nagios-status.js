@@ -49,6 +49,7 @@ function sortByStatus(data) {
 function statusToText(s, i) {
 	var acked = (s.acknowledged == 1);
 	var muted = !(s.notifications_enabled == 1);
+	var downtime = (s.scheduled_downtime_depth > 0);
 	//var selected = false;
 	//$.each(selectedItems, function(key, item) {
 	//	if (item == i) { selected = true; }
@@ -57,13 +58,16 @@ function statusToText(s, i) {
 		'<span class="statustext action">' +
 			( acked
 				? '<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />'
-				: '<img src="img/check_box.png" border="0" alt="Acknowledged" />'
+				: '<img src="img/check_box.png" border="0" id="unack-' + i + '" alt="Acknowledged" />'
 			) +
 			( muted
 				? '<img src="img/sound.png" border="0" id="unmute-' + i + '" alt="Enable Notifications" />'
 				: '<img src="img/sound_mute.png" border="0" id="mute-' + i + '" alt="Disable Notifications" />'
 			) +
-			'<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />' +
+			( !downtime
+				? '<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />'
+				: ''
+			) +
 			'<img src="img/zoom_in.png" border="0" id="zoom-' + i + '" alt="View Details" />' +
 			( s.action_url ? '<img src="img/monitor_link.png" border="0" id="url-' + i + '" alt="Action Information" /></a>' : '' ) +
 			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
@@ -129,7 +133,7 @@ function postLoadBinding() {
 		var onlyActive = $('#only-active').is(':checked');
 
 		if ( action == 'ack') {
-			$( "#dialog-ack-single" ).dialog({
+			$( "#dialog-single-ack" ).dialog({
 				resizable: false,
 				height: 140,
 				modal: true,
@@ -146,7 +150,7 @@ function postLoadBinding() {
 				}
 			});
 		} else if ( action == 'mute' ) {
-			$( "#dialog-ack-mute" ).dialog({
+			$( "#dialog-single-mute" ).dialog({
 				resizable: false,
 				height: 140,
 				modal: true,
@@ -163,7 +167,7 @@ function postLoadBinding() {
 				}
 			});
 		} else if ( action == 'unmute' ) {
-			$( "#dialog-ack-unmute" ).dialog({
+			$( "#dialog-single-unmute" ).dialog({
 				resizable: false,
 				height: 140,
 				modal: true,
