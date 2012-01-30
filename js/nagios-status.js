@@ -190,6 +190,23 @@ function postLoadBinding() {
 			// Pre-render display
 			renderZoom( g_hostname );
 
+			// Zoom filtering
+			$( '#zoom-filter' ).bind('keyup', function() {
+				var filter = $(this).val();
+				$( '.zoom-graph' ).each(function(k,v) {
+					var graph = $(this).attr('id').replace('zoom-graph-', '');
+					// If graph matches regex, show, else hide
+					if (graph.match(filter)) {
+						$(this).show();
+					} else {
+						$(this).hide();
+					}
+				});
+			});
+			$( '#zoom-filter-clear' ).bind('click', function() {
+				$( '#zoom-filter' ).val('');
+			});
+
 			// Display zoom dialog
 			$( '#dialog-zoom' ).dialog({
 				resizable: true,
@@ -198,6 +215,8 @@ function postLoadBinding() {
 				modal: true,
 				buttons: {
 					"Close": function() {
+						$( '#zoom-filter' ).unbind();
+						$( '#zoom-filter-clear' ).unbind();
 						$( this ).dialog( "close" );
 					}
 				}
@@ -285,19 +304,16 @@ function nagiosAction( action, d, options ) {
 }
 
 function renderZoom( hostname ) {
-	console.log(gangliauri + '/api/host.php?action=get' + 
-		  '&h=' + encodeURIComponent(hostname) +
-		  '&c=' + encodeURIComponent(resolve_ganglia_cluster(hostname)));
 	$.get(gangliauri + '/api/host.php?action=get' + 
 		  '&h=' + encodeURIComponent(hostname) +
 		  '&c=' + encodeURIComponent(resolve_ganglia_cluster(hostname)), function(data) {
 		var html = "";
 		if (data.status == 'ok') {
-			$.each(data.message, function(k, d) {
-				console.log(k + ' = ' + d);
-			});
+			//$.each(data.message, function(k, d) {
+			//	console.log(k + ' = ' + d);
+			//});
 			$.each(data.message.graph, function(k, d) {
-				html += '<img src="' + d['graph_url'] + '" />'
+				html += '<img class="zoom-graph" id="zoom-graph-' + d.title + '" src="' + d['graph_url'] + '" />'
 			});
 			$( '#dialog-zoom p' ).html( html );
 		} else {
