@@ -182,8 +182,9 @@ function postLoadBinding() {
 			// Populate zoom with host settings
 			var g_hostname = transform_nagios_hostname( d.host );
 
-			// TODO: Show some sort of loading dialog to avoid awkward
-			// stale data in certain cases.
+			// Show some sort of loading dialog to avoid awkward stale
+			// data in certain cases.
+			$('#dialog-zoom p').html('<div align="center" class="loading"><img src="img/ajax-loader.gif" border="0" /> <span style="display: block; vertical-align: middle; margin: 5px;">Loading ...</span></div>');
 
 			// Pre-render display
 			renderZoom( g_hostname );
@@ -284,10 +285,17 @@ function nagiosAction( action, d, options ) {
 function renderZoom( hostname ) {
 	$.get(gangliauri + '/api/host.php?action=get&h=' + encodeURIComponent(hostname), function(data) {
 		var html = "";
-		$.each(data['graph'], function(k, d) {
-			html += '<img src="' + d['graph_url'] + '" />'
-		});
-		$( '#dialog-zoom' ).html( html );
+		if (data.status == 'ok') {
+			$.each(data.message, function(k, d) {
+				console.log(k + ' = ' + d);
+			});
+			$.each(data.message.graph, function(k, d) {
+				html += '<img src="' + d['graph_url'] + '" />'
+			});
+			$( '#dialog-zoom p' ).html( html );
+		} else {
+			// Handle error
+		}
 	});
 } // end renderZoom
 
