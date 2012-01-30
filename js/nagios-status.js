@@ -65,6 +65,7 @@ function statusToText(s, i) {
 			) +
 			'<img src="img/umbrella.png" border="0" id="down-' + i + '" alt="Schedule Downtime" />' +
 			'<img src="img/zoom_in.png" border="0" id="zoom-' + i + '" alt="View Details" />' +
+			( s.action_url ? '<a href="' + s.action_url + '" target="_new"><img src="img/monitor_link.png" border="0" " alt="Action Information" /></a>' : '' ) +
 			'<input type="checkbox" id="nagios-status-checkbox-' + i + '" class="nagios-status-checkbox" value="1" />' +
 		'</span>' +
 		'<span class="statustext output">' + s.plugin_output + '</span>';
