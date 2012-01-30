@@ -186,6 +186,7 @@ function postLoadBinding() {
 			// data in certain cases.
 			$('#dialog-zoom-hostname').html('Host: ' + d.host);
 			$('#dialog-zoom p').html('<div align="center" class="loading"><img src="img/ajax-loader.gif" border="0" /> <span style="display: block; vertical-align: middle; margin: 5px;">Loading ...</span></div>');
+			$('#zoom-filter[placeholder]').placeholder();
 
 			// Pre-render display
 			renderZoom( g_hostname );
