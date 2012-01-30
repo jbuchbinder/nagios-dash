@@ -283,7 +283,9 @@ function nagiosAction( action, d, options ) {
 }
 
 function renderZoom( hostname ) {
-	$.get(gangliauri + '/api/host.php?action=get&h=' + encodeURIComponent(hostname), function(data) {
+	$.get(gangliauri + '/api/host.php?action=get' + 
+		  '&h=' + encodeURIComponent(hostname) +
+		  '&c=' + encodeURIComponent(resolve_ganglia_cluster(hostname)), function(data) {
 		var html = "";
 		if (data.status == 'ok') {
 			$.each(data.message, function(k, d) {

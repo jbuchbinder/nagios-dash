@@ -22,5 +22,12 @@ var transform_nagios_hostname = function(orig) {
   return orig;
 };
 
+var resolve_ganglia_cluster = function(host) {
+	// This function should resolve to the ganglia cluster name for
+	// a particular host. By default, this function is probably pretty
+	// broken for your installation.
+	return 'Infrastructure';
+};
+
 // vim: tabstop=4:softtabstop=4:shiftwidth=4:noexpandtab
 
