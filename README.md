@@ -19,13 +19,18 @@ or the Icinga API patch, available here:
 
   https://github.com/jbuchbinder/icinga-core
 
+It should also have a copy of Ganglia 2.x+ available with the host
+API implemented, which is available here:
+
+  https://github.com/ganglia/ganglia-web
+
 CONFIGURATION
 -------------
 
 To configure the console, edit js/settings.js and set the base URL of
 your Nagios/Icinga installation. Other than a working copy of the api.cgi
-binary from the aforementioned git branch, there are no external
-dependencies or server requirements.
+binary from the aforementioned git branch, and a copy of the Ganglia web
+interface, there are no external dependencies or server requirements.
 
 Enjoy!
 
