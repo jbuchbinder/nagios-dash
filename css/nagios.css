@@ -70,7 +70,6 @@ button img { padding-right: 5px; }
 /* Generic definitions for status lines */
 
 .nagios-status {
-	border: 1px solid #ffffff;
 	padding-top: 3px;
 	padding-bottom: 3px;
 	padding-left: 20px;
@@ -79,6 +78,10 @@ button img { padding-right: 5px; }
 	cursor: hand;
 	width: 100%;
 	max-width: 100%;
+}
+
+.nagios-status > * {
+	border-bottom: 1px solid #aaa;
 }
 
 .nagios-status:hover {
@@ -154,8 +157,20 @@ button img { padding-right: 5px; }
 	margin-right: 5px;
 }
 
+.input-wrapper input:focus {
+	outline: 0;
+}
+
 .input-wrapper img:hover {
 	cursor: hand;
+}
+
+.input-wrapper.indialog {
+	display: block !important;
+	width: 350px !important;
+}
+.input-wrapper.indialog input {
+	width: 320px !important;
 }
 
 /*

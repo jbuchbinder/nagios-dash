@@ -145,7 +145,7 @@ function postLoadBinding() {
 						$( '#nagios-notification-bar').text( d.host + '[' + d.service + '] acknowledged' );
 						$( '#nagios-notification-bar').show();
 						$( this ).dialog( "close" );
-						nagiosAction( action, d, null );
+						nagiosAction( action, d, { 'comment': $( '#single-ack-comment' ).val()  } );
 					},
 					"Cancel": function() {
 						$( this ).dialog( "close" );
