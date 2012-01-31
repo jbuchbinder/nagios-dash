@@ -57,8 +57,8 @@ function statusToText(s, i) {
 	return '<span class="statustext service">' + s.host + '[' + s.service + ']</span>' +
 		'<span class="statustext action">' +
 			( acked
-				? '<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />'
-				: '<img src="img/check_box.png" border="0" id="unack-' + i + '" alt="Acknowledged" />'
+				? '<img src="img/check_box.png" border="0" id="unack-' + i + '" alt="Acknowledged" />'
+				: '<img src="img/tick.png" border="0" id="ack-' + i + '" alt="Acknowledge Problem" />'
 			) +
 			( muted
 				? '<img src="img/sound.png" border="0" id="unmute-' + i + '" alt="Enable Notifications" />'
@@ -133,9 +133,12 @@ function postLoadBinding() {
 		var onlyActive = $('#only-active').is(':checked');
 
 		if ( action == 'ack') {
+			$( '#dialog-single-ack-host' ).html( d.host );
+			$( '#dialog-single-ack-service' ).html( d.service );
 			$( "#dialog-single-ack" ).dialog({
 				resizable: false,
-				height: 140,
+				height: 500,
+				width: 500,
 				modal: true,
 				buttons: {
 					"Acknowledge": function() {
@@ -149,10 +152,15 @@ function postLoadBinding() {
 					}
 				}
 			});
+		} else if ( action == 'unack' ) {
+			alert('Cannot unacknowledge');
 		} else if ( action == 'mute' ) {
+			$( '#dialog-single-mute-host' ).html( d.host );
+			$( '#dialog-single-mute-service' ).html( d.service );
 			$( "#dialog-single-mute" ).dialog({
 				resizable: false,
-				height: 140,
+				height: 500,
+				width: 500,
 				modal: true,
 				buttons: {
 					"Mute": function() {
@@ -167,9 +175,12 @@ function postLoadBinding() {
 				}
 			});
 		} else if ( action == 'unmute' ) {
+			$( '#dialog-single-unmute-host' ).html( d.host );
+			$( '#dialog-single-unmute-service' ).html( d.service );
 			$( "#dialog-single-unmute" ).dialog({
 				resizable: false,
-				height: 140,
+				height: 500,
+				width: 500,
 				modal: true,
 				buttons: {
 					"Unmute": function() {
