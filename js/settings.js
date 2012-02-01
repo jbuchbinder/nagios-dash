@@ -1,6 +1,11 @@
 // NAGIOS-DASH
 // https://github.com/jbuchbinder/nagios-dash
 
+// Set your dashboard refresh rate in milliseconds. If this value is
+// set to 0, it disables refresh.
+
+var refresh_timeout = 30 * 1000;
+
 // Set your Nagios URI here. If you run Nagios on the same server as
 // Nagios-Dash, this will probably work for you. Nagios needs to be
 // using the API branch from github to work properly:
