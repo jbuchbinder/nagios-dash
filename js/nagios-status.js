@@ -222,9 +222,6 @@ function postLoadBinding() {
 					}
 				});
 			});
-			$( '#zoom-filter-clear' ).bind('click', function() {
-				$( '#zoom-filter' ).val('');
-			});
 
 			// Display zoom dialog
 			$( '#dialog-zoom' ).dialog({
@@ -372,6 +369,11 @@ $(document).ready(function() {
 
 	// Load all data
 	loadNagiosStatus();
+
+	// Set repeating event
+    if ( refresh_timeout > 0 ) {
+		setInterval( 'loadNagiosStatus()', refresh_timeout );
+	}
 });
 
 // vim: tabstop=4:softtabstop=4:shiftwidth=4:noexpandtab
