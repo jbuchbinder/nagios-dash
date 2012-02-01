@@ -16,6 +16,8 @@ button * {
 
 button img { padding-right: 5px; }
 
+button:hover { cursor: hand; }
+
 /* Container which holds all Nagios status lines */
 
 #nagios-status-container {
